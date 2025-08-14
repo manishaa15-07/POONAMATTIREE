@@ -78,15 +78,44 @@ const Products = () => {
         fetchProducts();
     }, [filters]);
 
-    useEffect(() => {
-        const categoryFromUrl = searchParams.get('category');
-        if (categoryFromUrl) {
-            const categoryObject = categories.find(c => c.value.toLowerCase() === categoryFromUrl.toLowerCase());
-            if (categoryObject) {
-                setSelectedCategory(categoryObject);
-            }
-        }
-    }, [searchParams]);
+    // useEffect(() => {
+    //     const categoryFromUrl = searchParams.get('category');
+    //     if (categoryFromUrl) {
+    //         const categoryObject = categories.find(c => c.value.toLowerCase() === categoryFromUrl.toLowerCase());
+    //         if (categoryObject) {
+    //             setSelectedCategory(categoryObject);
+    //         }
+    //     }
+    // }, [searchParams]);
+
+
+    // useEffect(() => {
+    //     const categoryFromUrl = searchParams.get('category');
+    //     const searchFromUrl = searchParams.get('search');
+
+    //     if (categoryFromUrl) {
+    //         const categoryObject = categories.find(
+    //             c => c.value.toLowerCase() === categoryFromUrl.toLowerCase()
+    //         );
+    //         if (categoryObject) {
+    //             setSelectedCategory(categoryObject);
+    //         }
+    //     }
+
+    //     // ✅ Sync search from URL into filters
+    //     setFilters(prev => ({
+    //         ...prev,
+    //         category: categoryFromUrl || '',
+    //         search: searchFromUrl || '',
+    //     }));
+    // }, [searchParams]);
+
+
+
+
+
+
+
 
     useEffect(() => {
         setFilters(prev => ({
@@ -247,9 +276,9 @@ const Products = () => {
                     </button>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                     {products.map(product => (
-                        <div key={product._id} className="relative bg-white shadow-md rounded-lg overflow-hidden group">
+                        <div key={product._id} className="relative bg-white shadow-md rounded-md overflow-hidden group">
                             {/* Discount Badge */}
                             <div className="absolute top-0 left-0 bg-primary text-white text-xs font-bold px-2 py-1 rounded-br-lg">
                                 10% OFF
@@ -259,7 +288,7 @@ const Products = () => {
                                 <img
                                     src={product.images?.[0] || '/placeholder-image.jpg'}
                                     alt={product.name}
-                                    className="w-full h-[350px] object-cover"
+                                    className="w-full h-[450px] object-cover"
                                     onError={(e) => {
                                         e.target.src = '/placeholder-image.jpg';
                                     }}

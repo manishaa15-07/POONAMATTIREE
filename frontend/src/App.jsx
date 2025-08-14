@@ -17,6 +17,7 @@ import OrderConfirmation from './pages/OrderConfirmation';
 import AdminApp from './admin/AdminApp';
 import { Toaster } from 'react-hot-toast';
 import { PreloaderProvider } from './context/PreloaderContext';
+import NewArrivals from './pages/new';
 
 function App() {
     const location = useLocation();
@@ -55,6 +56,7 @@ function App() {
                                 <Route path="/login" element={<Login />} />
                                 <Route path="/register" element={<Register />} />
                                 <Route path="/checkout" element={<Checkout />} />
+                                <Route path="/new" element={<NewArrivals />} />
                                 <Route path="/order-confirmation/:id" element={<OrderConfirmation />} />
                                 <Route
                                     path="/profile"
