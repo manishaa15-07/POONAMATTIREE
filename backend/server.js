@@ -24,7 +24,6 @@ const app = express();
 connectDB();
 
 // Middleware
-const cors = require("cors");
 
 const allowedOrigins = [
     "https://poonamattiree-teeg.vercel.app",
