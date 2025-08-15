@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://poonamattiree-kffkoqu0d-manisha-s-projects-f984aff4.vercel.app/api';
+const API_URL = 'https://poonamattiree.vercel.app';
 
 // Create axios instance with default config
 const adminAPI = axios.create({
