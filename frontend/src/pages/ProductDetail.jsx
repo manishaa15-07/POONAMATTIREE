@@ -102,8 +102,8 @@ const ProductDetail = () => {
                         <div className="space-y-4">
                             <div className="aspect-w-1 aspect-h-1 w-full">
                                 <img
-                                    src={product.images[0]}
-                                    alt={product.name}
+                                    src={product.images[0] || '/placeholder.jpg'}
+                                    alt={product.name || 'No name'}
                                     className="w-full h-96 object-cover rounded-lg"
                                 />
                             </div>
