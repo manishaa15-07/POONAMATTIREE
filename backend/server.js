@@ -43,7 +43,12 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ error: 'Something went wrong!' });
 });
-
+app.use('/', (req, res) => {
+    res.send({
+        activeStatus: true,
+        error: false
+    })
+})
 // const PORT = process.env.PORT || 5000;
 
 // Only start the server if we're not in a test environment
