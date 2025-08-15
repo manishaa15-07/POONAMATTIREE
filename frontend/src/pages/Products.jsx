@@ -7,8 +7,7 @@ import { HiSelector } from 'react-icons/hi';
 import { Listbox, Transition } from '@headlessui/react';
 import { wishlistAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://poonamattiree-kffkoqu0d-manisha-s-projects-f984aff4.vercel.app/api';
 
 const categories = [
     { name: 'All Categories', value: '' },
