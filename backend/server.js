@@ -26,7 +26,7 @@ connectDB();
 // Middleware
 app.use(cors({
     origin: ['http://localhost:3000',
-        'https://poonamattiree-teeg-rlspspwny-manisha-s-projects-f984aff4.vercel.app' // or your frontend URL
+        'https://poonamattiree-teeg.vercel.app/' // or your frontend URL
     ],
     credentials: true,
     exposedHeaders: ['Authorization']
