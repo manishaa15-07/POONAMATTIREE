@@ -24,14 +24,14 @@ const app = express();
 connectDB();
 
 // Middleware
+const cors = require("cors");
+
 app.use(cors({
-    origin: ['http://localhost:3000',
-        'https://poonamattiree-teeg.vercel.app/' // or your frontend URL
-    ],
-    credentials: true,
-    exposedHeaders: ['Authorization']
+    origin: "https://poonamattiree-teeg.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
 }));
-app.use(express.json());
+
 
 // Routes
 app.use('/api/users', userRoutes);
