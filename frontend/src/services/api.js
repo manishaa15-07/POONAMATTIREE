@@ -4,7 +4,7 @@ import axios from 'axios';
 const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 const API_URL = isDevelopment
     ? 'http://localhost:5000/api'
-    : 'https://poonamattiree.vercel.app';
+    : 'https://poonamattiree.vercel.app/api';
 
 console.log('🔧 Environment:', isDevelopment ? 'Development' : 'Production');
 console.log('🔧 API URL:', API_URL);
