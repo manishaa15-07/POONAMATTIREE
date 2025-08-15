@@ -106,16 +106,16 @@ const Products = () => {
         }
     };
 
-    const toggleProductStatus = async (productId, currentStatus) => {
-        try {
-            await adminProductsAPI.update(productId, { isActive: !currentStatus });
-            toast.success('Product status updated');
-            fetchProducts();
-        } catch (error) {
-            console.error('Error updating product status:', error);
-            toast.error('Failed to update product status');
-        }
-    };
+    // const toggleProductStatus = async (productId, currentStatus) => {
+    //     try {
+    //         await adminProductsAPI.update(productId, { isActive: !currentStatus });
+    //         toast.success('Product status updated');
+    //         fetchProducts();
+    //     } catch (error) {
+    //         console.error('Error updating product status:', error);
+    //         toast.error('Failed to update product status');
+    //     }
+    // };
 
     if (loading) {
         return (

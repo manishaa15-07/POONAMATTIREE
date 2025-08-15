@@ -39,7 +39,6 @@ const Products = () => {
     const { user } = useAuth();
     const [wishlistLoading, setWishlistLoading] = useState({});
 
-    const { addToCart } = useCart();
 
     const [searchParams] = useSearchParams();
     const initialCategory = categories.find(c => c.value.toLowerCase() === (searchParams.get('category') || '').toLowerCase()) || categories[0];
@@ -129,13 +128,13 @@ const Products = () => {
         setFilters(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleAddToCart = async (productId) => {
-        try {
-            await addToCart(productId, 1, 'M'); // Default quantity 1 and size M
-        } catch (err) {
-            console.error('Error adding to cart:', err);
-        }
-    };
+    // const handleAddToCart = async (productId) => {
+    //     try {
+    //         await addToCart(productId, 1, 'M'); // Default quantity 1 and size M
+    //     } catch (err) {
+    //         console.error('Error adding to cart:', err);
+    //     }
+    // };
 
     const isInWishlist = (productId) => {
         if (!user || !user.wishlist) return false;

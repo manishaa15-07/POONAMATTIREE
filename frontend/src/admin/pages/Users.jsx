@@ -47,16 +47,16 @@ const Users = () => {
         fetchUsers();
     };
 
-    const handleToggleStatus = async (userId) => {
-        try {
-            await adminUsersAPI.toggleStatus(userId);
-            toast.success('User status updated successfully');
-            fetchUsers();
-        } catch (error) {
-            console.error('Error updating user status:', error);
-            toast.error('Failed to update user status');
-        }
-    };
+    // const handleToggleStatus = async (userId) => {
+    //     try {
+    //         await adminUsersAPI.toggleStatus(userId);
+    //         toast.success('User status updated successfully');
+    //         fetchUsers();
+    //     } catch (error) {
+    //         console.error('Error updating user status:', error);
+    //         toast.error('Failed to update user status');
+    //     }
+    // };
 
     const handleDeleteUser = async (userId) => {
         if (window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
@@ -84,11 +84,11 @@ const Users = () => {
         return colors[role] || 'bg-gray-100 text-gray-800';
     };
 
-    const getStatusBadge = (isActive) => {
-        return isActive
-            ? 'bg-green-100 text-green-800'
-            : 'bg-red-100 text-red-800';
-    };
+    // const getStatusBadge = (isActive) => {
+    //     return isActive
+    //         ? 'bg-green-100 text-green-800'
+    //         : 'bg-red-100 text-red-800';
+    // };
 
     if (loading) {
         return (

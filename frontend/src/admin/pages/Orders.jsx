@@ -42,6 +42,7 @@ const Orders = () => {
         }
     };
 
+
     const handleSearch = () => {
         setCurrentPage(1);
         fetchOrders();
