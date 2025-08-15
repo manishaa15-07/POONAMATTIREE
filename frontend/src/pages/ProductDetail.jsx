@@ -22,9 +22,12 @@ const ProductDetail = () => {
             try {
                 setLoading(true);
                 const response = await productsAPI.getById(id);
-                setProduct(response.data);
-                if (response.data.sizes && response.data.sizes.length > 0) {
-                    setSelectedSize(response.data.sizes[0]);
+                const productData = response.data;
+
+                setProduct(productData);
+
+                if (productData?.sizes?.length > 0) {
+                    setSelectedSize(productData.sizes[0]);
                 }
             } catch (err) {
                 setError('Product not found');
@@ -44,7 +47,7 @@ const ProductDetail = () => {
             return;
         }
 
-        if (!selectedSize && product.sizes && product.sizes.length > 0) {
+        if (!selectedSize && product?.sizes?.length > 0) {
             toast.error('Please select a size');
             return;
         }
@@ -60,7 +63,7 @@ const ProductDetail = () => {
             return;
         }
 
-        if (!selectedSize && product.sizes && product.sizes.length > 0) {
+        if (!selectedSize && product?.sizes?.length > 0) {
             toast.error('Please select a size');
             return;
         }
@@ -93,6 +96,8 @@ const ProductDetail = () => {
         );
     }
 
+    const images = product?.images?.length ? product.images : ['/placeholder.jpg'];
+
     return (
         <div className="min-h-screen bg-gray-50 py-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -102,18 +107,18 @@ const ProductDetail = () => {
                         <div className="space-y-4">
                             <div className="aspect-w-1 aspect-h-1 w-full">
                                 <img
-                                    src={product.images[0] || '/placeholder.jpg'}
-                                    alt={product.name || 'No name'}
+                                    src={images[0]}
+                                    alt={product?.name || 'No name'}
                                     className="w-full h-96 object-cover rounded-lg"
                                 />
                             </div>
-                            {product.images.length > 1 && (
+                            {images.length > 1 && (
                                 <div className="grid grid-cols-4 gap-2">
-                                    {product.images.slice(1).map((image, index) => (
+                                    {images.slice(1).map((image, index) => (
                                         <img
                                             key={index}
                                             src={image}
-                                            alt={`${product.name} ${index + 2}`}
+                                            alt={`${product?.name || 'Product'} ${index + 2}`}
                                             className="w-full h-20 object-cover rounded cursor-pointer hover:opacity-75 transition"
                                         />
                                     ))}
@@ -124,17 +129,21 @@ const ProductDetail = () => {
                         {/* Product Info */}
                         <div className="space-y-6">
                             <div>
-                                <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
-                                <p className="text-2xl font-semibold text-primary">₹{product.price}</p>
+                                <h1 className="text-3xl font-bold text-gray-900 mb-2">{product?.name}</h1>
+                                <p className="text-2xl font-semibold text-primary">
+                                    ₹{product?.price ?? 'N/A'}
+                                </p>
                             </div>
 
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
-                                <p className="text-gray-600 leading-relaxed">{product.description}</p>
+                                <p className="text-gray-600 leading-relaxed">
+                                    {product?.description || 'No description available.'}
+                                </p>
                             </div>
 
                             {/* Size Selection */}
-                            {product.sizes && product.sizes.length > 0 && (
+                            {product?.sizes?.length > 0 && (
                                 <div>
                                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Select Size</h3>
                                     <div className="flex flex-wrap gap-2">
@@ -143,8 +152,8 @@ const ProductDetail = () => {
                                                 key={size}
                                                 onClick={() => setSelectedSize(size)}
                                                 className={`px-4 py-2 border rounded-md transition ${selectedSize === size
-                                                    ? 'border-primary bg-primary text-white'
-                                                    : 'border-gray-300 hover:border-primary'
+                                                        ? 'border-primary bg-primary text-white'
+                                                        : 'border-gray-300 hover:border-primary'
                                                     }`}
                                             >
                                                 {size}
@@ -176,8 +185,11 @@ const ProductDetail = () => {
 
                             {/* Stock Status */}
                             <div>
-                                <p className={`text-sm ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
-                                    {product.inStock ? 'In Stock' : 'Out of Stock'}
+                                <p
+                                    className={`text-sm ${product?.inStock ? 'text-green-600' : 'text-red-600'
+                                        }`}
+                                >
+                                    {product?.inStock ? 'In Stock' : 'Out of Stock'}
                                 </p>
                             </div>
 
@@ -185,14 +197,14 @@ const ProductDetail = () => {
                             <div className="flex flex-col sm:flex-row gap-4">
                                 <button
                                     onClick={handleAddToCart}
-                                    disabled={!product.inStock}
+                                    disabled={!product?.inStock}
                                     className="flex-1 px-6 py-3 bg-primary text-white rounded-md hover:bg-[#b94e13] transition disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     Add to Cart
                                 </button>
                                 <button
                                     onClick={handleBuyNow}
-                                    disabled={!product.inStock}
+                                    disabled={!product?.inStock}
                                     className="flex-1 px-6 py-3 bg-black text-white rounded-md hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     Buy Now
@@ -203,9 +215,9 @@ const ProductDetail = () => {
                             <div className="border-t pt-6 space-y-4">
                                 <div className="flex items-center text-sm text-gray-600">
                                     <span className="font-semibold mr-2">Category:</span>
-                                    <span>{product.category}</span>
+                                    <span>{product?.category || 'N/A'}</span>
                                 </div>
-                                {product.brand && (
+                                {product?.brand && (
                                     <div className="flex items-center text-sm text-gray-600">
                                         <span className="font-semibold mr-2">Brand:</span>
                                         <span>{product.brand}</span>
@@ -220,4 +232,4 @@ const ProductDetail = () => {
     );
 };
 
-export default ProductDetail; 
+export default ProductDetail;
