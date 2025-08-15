@@ -79,8 +79,8 @@ const Navbar = () => {
                                 {isProfileOpen && (
                                     <div className="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 animate-fadeIn z-50">
                                         <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsProfileOpen(false)}>Profile</Link>
-                                        <Link to="/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsProfileOpen(false)}>My Orders</Link>
-                                        <Link to="/wishlist" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsProfileOpen(false)}>Wishlist</Link>
+                                        {/* <Link to="/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsProfileOpen(false)}>My Orders</Link>
+                                        <Link to="/wishlist" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setIsProfileOpen(false)}>Wishlist</Link> */}
                                         <button
                                             onClick={() => { logout(); setIsProfileOpen(false); }}
                                             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"

@@ -3,6 +3,32 @@ const router = express.Router();
 const Product = require('../models/Product');
 const { auth, adminAuth } = require('../middleware/auth');
 
+// Debug endpoint to check database status
+router.get('/debug/status', async (req, res) => {
+    try {
+        const totalProducts = await Product.countDocuments({});
+        const activeProducts = await Product.countDocuments({ isActive: true });
+        const sampleProduct = await Product.findOne({ isActive: true });
+
+        res.json({
+            status: 'Database connected',
+            totalProducts,
+            activeProducts,
+            sampleProduct: sampleProduct ? {
+                id: sampleProduct._id,
+                name: sampleProduct.name,
+                hasStock: sampleProduct.stock ? true : false,
+                stockType: sampleProduct.stock ? typeof sampleProduct.stock : 'undefined'
+            } : null
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: 'Database connection failed',
+            details: error.message
+        });
+    }
+});
+
 // Get all products (with better filtering and pagination)
 router.get('/', async (req, res) => {
     try {
@@ -32,22 +58,8 @@ router.get('/', async (req, res) => {
 
         const count = await Product.countDocuments(query);
 
-        // Add inStock field to each product based on stock data
-        const productsWithStock = products.map(product => {
-            const productObj = product.toObject();
-            // Check if any size has stock > 0
-            let hasStock = false;
-            if (productObj.stock && productObj.stock instanceof Map) {
-                for (const [size, quantity] of productObj.stock) {
-                    if (quantity > 0) {
-                        hasStock = true;
-                        break;
-                    }
-                }
-            }
-            productObj.inStock = hasStock;
-            return productObj;
-        });
+        // Convert to objects to include virtual fields
+        const productsWithStock = products.map(product => product.toJSON());
 
         if (productsWithStock.length === 0) {
             return res.status(200).json({
@@ -76,10 +88,14 @@ router.get('/', async (req, res) => {
 // Get single product
 router.get('/:id', async (req, res) => {
     try {
+        console.log('🔍 Fetching product with ID:', req.params.id);
+
         const product = await Product.findOne({
             _id: req.params.id,
             isActive: true
         });
+
+        console.log('🔍 Found product:', product);
 
         if (!product) {
             return res.status(404).json({
@@ -88,20 +104,15 @@ router.get('/:id', async (req, res) => {
         }
 
         // Add inStock field based on stock data
-        const productObj = product.toObject();
-        let hasStock = false;
-        if (productObj.stock && productObj.stock instanceof Map) {
-            for (const [size, quantity] of productObj.stock) {
-                if (quantity > 0) {
-                    hasStock = true;
-                    break;
-                }
-            }
-        }
-        productObj.inStock = hasStock;
+        const productObj = product.toJSON();
+        console.log('🔍 Product object:', productObj);
+        console.log('🔍 Stock field type:', typeof productObj.stock);
+        console.log('🔍 Stock field value:', productObj.stock);
+        console.log('🔍 inStock field:', productObj.inStock);
 
         res.json(productObj);
     } catch (error) {
+        console.error('❌ Error in getById:', error);
         if (error.kind === 'ObjectId') {
             return res.status(400).json({
                 error: 'Invalid product ID format'

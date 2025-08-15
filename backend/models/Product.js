@@ -130,6 +130,39 @@ productSchema.pre('save', function (next) {
     next();
 });
 
+// Transform method to handle Map serialization
+productSchema.methods.toJSON = function () {
+    const product = this.toObject();
+
+    // Convert Map to plain object for JSON serialization
+    if (product.stock && product.stock instanceof Map) {
+        product.stock = Object.fromEntries(product.stock);
+    }
+
+    return product;
+};
+
+// Virtual field for inStock
+productSchema.virtual('inStock').get(function () {
+    if (!this.stock) return false;
+
+    if (this.stock instanceof Map) {
+        for (const [size, quantity] of this.stock) {
+            if (quantity > 0) return true;
+        }
+    } else if (typeof this.stock === 'object') {
+        for (const [size, quantity] of Object.entries(this.stock)) {
+            if (quantity > 0) return true;
+        }
+    }
+
+    return false;
+});
+
+// Ensure virtual fields are included in JSON
+productSchema.set('toJSON', { virtuals: true });
+productSchema.set('toObject', { virtuals: true });
+
 // Method to check if a specific size is in stock
 productSchema.methods.isSizeInStock = function (size, quantity = 1) {
     return (this.stock.get(size) || 0) >= quantity;

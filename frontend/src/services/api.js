@@ -1,6 +1,13 @@
 import axios from 'axios';
 
-const API_URL = 'https://poonamattiree.vercel.app';
+// Use local backend for development, production URL as fallback
+const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_URL = isDevelopment
+    ? 'http://localhost:5000/api'
+    : 'https://poonamattiree.vercel.app';
+
+console.log('🔧 Environment:', isDevelopment ? 'Development' : 'Production');
+console.log('🔧 API URL:', API_URL);
 
 // Create axios instance with default config
 const api = axios.create({

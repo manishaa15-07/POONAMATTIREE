@@ -7,13 +7,40 @@ const { auth, adminAuth } = require('../middleware/auth');
 // Register a new user
 router.post('/register', async (req, res) => {
     try {
+        console.log('🔍 Registration request received:', req.body);
         const { firstName, lastName, email, password } = req.body;
+
+        // Validate required fields
+        if (!firstName || !lastName || !email || !password) {
+            const missingFields = [];
+            if (!firstName) missingFields.push('firstName');
+            if (!lastName) missingFields.push('lastName');
+            if (!email) missingFields.push('email');
+            if (!password) missingFields.push('password');
+
+            console.log('❌ Missing required fields:', missingFields);
+            return res.status(400).json({
+                error: 'Missing required fields',
+                missingFields
+            });
+        }
+
+        // Validate password length
+        if (password.length < 6) {
+            console.log('❌ Password too short:', password.length);
+            return res.status(400).json({
+                error: 'Password must be at least 6 characters long'
+            });
+        }
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
+            console.log('❌ Email already registered:', email);
             return res.status(400).json({ error: 'Email already registered' });
         }
+
+        console.log('✅ Creating new user with data:', { firstName, lastName, email, passwordLength: password.length });
 
         // Create new user
         const user = new User({
@@ -24,6 +51,7 @@ router.post('/register', async (req, res) => {
         });
 
         await user.save();
+        console.log('✅ User created successfully:', user._id);
 
         // Generate token
         const token = jwt.sign(
@@ -43,6 +71,12 @@ router.post('/register', async (req, res) => {
             }
         });
     } catch (error) {
+        console.error('❌ Registration error:', error);
+        console.error('❌ Error details:', {
+            name: error.name,
+            message: error.message,
+            stack: error.stack
+        });
         res.status(400).json({ error: error.message });
     }
 });
