@@ -96,7 +96,7 @@ const productSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ['Sarees', 'Lehengas', 'Gowns', 'Suits', 'Kurtis']
+        enum: ['Sarees', 'Lehengas', 'Gowns', 'Suits', 'Kurtis', 'Dresses', 'Kurtis', 'Bottoms', 'CropTop', 'Suit Sets', 'Dress Materials']
     },
     sizes: [{
         type: String,
@@ -113,6 +113,14 @@ const productSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
+    },
+    featured: {
+        type: Boolean,
+        default: false
+    },
+    recommended: {
+        type: Boolean,
+        default: false
     },
     createdAt: {
         type: Date,

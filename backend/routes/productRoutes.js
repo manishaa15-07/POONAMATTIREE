@@ -254,4 +254,83 @@ router.delete('/:id', adminAuth, async (req, res) => {
     }
 });
 
+// Get featured products
+router.get('/featured/list', async (req, res) => {
+    try {
+        const featuredProducts = await Product.find({
+            featured: true,
+            isActive: true
+        }).limit(6);
+
+        const productsWithStock = featuredProducts.map(product => product.toJSON());
+
+        res.json({
+            products: productsWithStock,
+            total: productsWithStock.length
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: 'Server error while fetching featured products',
+            details: error.message
+        });
+    }
+});
+
+// Get recommended products
+router.get('/recommended/list', async (req, res) => {
+    try {
+        const recommendedProducts = await Product.find({
+            recommended: true,
+            isActive: true
+        }).limit(6);
+
+        const productsWithStock = recommendedProducts.map(product => product.toJSON());
+
+        res.json({
+            products: productsWithStock,
+            total: productsWithStock.length
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: 'Server error while fetching recommended products',
+            details: error.message
+        });
+    }
+});
+
+// Get products by category
+router.get('/category/:category', async (req, res) => {
+    try {
+        const { category } = req.params;
+        const { page = 1, limit = 12 } = req.query;
+
+        const query = {
+            category: { $regex: new RegExp(category, 'i') },
+            isActive: true
+        };
+
+        const products = await Product.find(query)
+            .sort({ createdAt: -1 })
+            .limit(parseInt(limit))
+            .skip((parseInt(page) - 1) * parseInt(limit));
+
+        const count = await Product.countDocuments(query);
+
+        const productsWithStock = products.map(product => product.toJSON());
+
+        res.json({
+            products: productsWithStock,
+            total: count,
+            page: parseInt(page),
+            pages: Math.ceil(count / limit),
+            category: category
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: 'Server error while fetching category products',
+            details: error.message
+        });
+    }
+});
+
 module.exports = router;
