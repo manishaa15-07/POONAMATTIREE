@@ -1,13 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import axios from 'axios';
 import { FaHeart, FaRegHeart } from 'react-icons/fa'; // Wishlist icons
 import { HiSelector } from 'react-icons/hi';
 import { Listbox, Transition } from '@headlessui/react';
-import { wishlistAPI } from '../services/api';
+import { wishlistAPI, productsAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-const API_URL = 'https://poonamattiree.vercel.app/api' || 'http://localhost:5000/api';
 
 const categories = [
     { name: 'All Categories', value: '' },
@@ -50,14 +48,14 @@ const Products = () => {
             setLoading(true);
             const { category, search, sort } = filters;
 
-            const params = new URLSearchParams();
-            if (category) params.append('category', category);
-            if (search) params.append('search', search);
-            if (sort === 'price_asc') params.append('sort', 'price-asc');
-            else if (sort === 'price_desc') params.append('sort', 'price-desc');
-            else if (sort === 'newest') params.append('sort', 'newest');
+            const params = {};
+            if (category) params.category = category;
+            if (search) params.search = search;
+            if (sort === 'price_asc') params.sort = 'price-asc';
+            else if (sort === 'price_desc') params.sort = 'price-desc';
+            else if (sort === 'newest') params.sort = 'newest';
 
-            const response = await axios.get(`${API_URL}/products?${params.toString()}`);
+            const response = await productsAPI.getAll(params);
 
             const { products: fetchedProducts = [], total = 0 } = response.data;
 
@@ -282,7 +280,7 @@ const Products = () => {
                                 10% OFF
                             </div>
 
-                            <Link to={`/products/${product._id}`}>
+                            <Link to={`/product/${product._id}`}>
                                 <img
                                     src={product.images?.[0] || '/placeholder-image.jpg'}
                                     alt={product.name}
@@ -293,7 +291,7 @@ const Products = () => {
                                 />
                             </Link>
                             <div className="p-4">
-                                <Link to={`/products/${product._id}`}>
+                                <Link to={`/product/${product._id}`}>
                                     <h3 className="text-lg font-semibold mb-1 hover:text-primary">
                                         {product.name}
                                     </h3>

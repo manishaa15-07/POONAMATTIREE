@@ -21,19 +21,27 @@ const ProductDetail = () => {
         const fetchProduct = async () => {
             try {
                 setLoading(true);
+                console.log('🔍 Fetching product with ID:', id);
                 const response = await productsAPI.getById(id);
                 console.log('🔍 Product API Response:', response.data);
                 console.log('🔍 Product stock data:', response.data.stock);
                 console.log('🔍 Product inStock field:', response.data.inStock);
                 console.log('🔍 Product sizes:', response.data.sizes);
                 console.log('🔍 Product images:', response.data.images);
+
+                if (!response.data) {
+                    throw new Error('No product data received');
+                }
+
                 setProduct(response.data);
                 if (response.data.sizes && Array.isArray(response.data.sizes) && response.data.sizes.length > 0) {
                     setSelectedSize(response.data.sizes[0]);
                 }
             } catch (err) {
-                setError('Product not found');
                 console.error('Error fetching product:', err);
+                console.error('Error response:', err.response);
+                console.error('Error message:', err.message);
+                setError(err.response?.data?.error || err.message || 'Product not found');
             } finally {
                 setLoading(false);
             }
@@ -96,13 +104,28 @@ const ProductDetail = () => {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Product Not Found</h2>
-                    <button
-                        onClick={() => navigate('/products')}
-                        className="px-6 py-2 bg-primary text-white rounded hover:bg-[#b94e13] transition"
-                    >
-                        Back to Products
-                    </button>
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                        {error ? 'Error Loading Product' : 'Product Not Found'}
+                    </h2>
+                    {error && (
+                        <p className="text-gray-600 mb-4 max-w-md mx-auto">
+                            {error}
+                        </p>
+                    )}
+                    <div className="space-y-3">
+                        <button
+                            onClick={() => navigate('/products')}
+                            className="px-6 py-2 bg-primary text-white rounded hover:bg-[#b94e13] transition"
+                        >
+                            Back to Products
+                        </button>
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="block w-full px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+                        >
+                            Try Again
+                        </button>
+                    </div>
                 </div>
             </div>
         );
