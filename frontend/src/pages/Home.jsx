@@ -98,7 +98,7 @@ const Home = () => {
                     Discover the finest ethnic and western wear, handpicked for every occasion.
                 </p>
                 <Link
-                    to="/shop"
+                    to="/products"
                     className="mt-6 inline-block bg-white text-primary font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-200"
                 >
                     Shop Now
